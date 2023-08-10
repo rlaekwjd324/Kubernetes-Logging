@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-node-service
+  namespace: test-node
+spec:
+  selector:
+    app: test-node
+  ports:
+  - name: http
+    protocol: TCP
+    port: 3033
+    targetPort: 3033
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-node-deployment
+  namespace: test-node
+spec:
+  selector:
+    matchLabels:
+      app: test-node
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: test-node
+    spec:
+      containers:
+      - name: test-node
+        image: devdorydory/test-node
+        ports:
+        - containerPort: 3033
